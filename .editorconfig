@@ -1,0 +1,38 @@
+# EditorConfig ajuda a manter estilos de codificação consistentes
+# entre diferentes editores e IDEs.
+# https://editorconfig.org
+
+# Indica que este é o arquivo de configuração raiz do projeto.
+# O editor não buscará por outros arquivos .editorconfig em diretórios pais.
+root = true
+
+# Regras universais aplicadas a todos os tipos de arquivo.
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Regras específicas para arquivos Terraform.
+# A convenção oficial da HashiCorp e da comunidade é usar 2 espaços.
+# Esta regra reforça o padrão definido em [*].
+[*.{tf,tfvars}]
+indent_size = 2
+
+# Regras específicas para arquivos Markdown.
+# Desativa a remoção de espaços no final da linha, pois na sintaxe
+# Markdown, dois espaços no final de uma linha forçam uma quebra (<br>).
+[*.md]
+trim_trailing_whitespace = false
+
+# Regras para arquivos YAML, comuns em configurações do Kubernetes.
+# A convenção para YAML também é usar 2 espaços para indentação.
+[*.{yml,yaml}]
+indent_size = 2
+
+# Regras para Makefiles, caso sejam usados no projeto.
+# Makefiles exigem o uso de TABS para indentação.
+[Makefile]
+indent_style = tab
