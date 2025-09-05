@@ -1,0 +1,26 @@
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+
+metadata:
+  name: fc-hrsc-kibana
+  namespace: codeflix
+
+spec:
+  version: 8.15.1
+  count: 1
+  elasticsearchRef:
+    name: fc-hrsc-elasticsearch
+  podTemplate:
+    metadata:
+      labels:
+        schedule_on: fargate
+    spec:
+      containers:
+        - name: kibana
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 0.5
+            limits:
+              memory: 1Gi
+              cpu: 0.5

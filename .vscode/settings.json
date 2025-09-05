@@ -1,5 +1,6 @@
 {
   "cSpell.words": [
+    "autodiscover",
     "awscli",
     "codeflix",
     "eksctl",
@@ -7,12 +8,18 @@
     "filebeat",
     "hrsc",
     "iamserviceaccount",
+    "kibana",
     "kube",
+    "mmap",
     "mysql",
     "nginx",
     "oidc",
     "rabbitmq",
+    "replicasets",
     "storageclass",
+    "varlibdockercontainers",
+    "varlogcontainers",
+    "varlogpods",
     "vhost",
     "xforwarded"
   ]

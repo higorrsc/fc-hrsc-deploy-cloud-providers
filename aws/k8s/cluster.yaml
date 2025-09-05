@@ -10,19 +10,11 @@ iam:
   withOIDC: true
 
 managedNodeGroups:
-  - name: fc-hrsc-mng-db
+  - name: fc-hrsc-mng-app
     instanceType: t3.small
-    desiredCapacity: 1
+    desiredCapacity: 3
     labels:
-      role: db
-    iam:
-      withAddonPolicies:
-        ebs: true
-  - name: fc-hrsc-mng-messaging
-    instanceType: t3.small
-    desiredCapacity: 1
-    labels:
-      role: messaging
+      type: ec2
     iam:
       withAddonPolicies:
         ebs: true
@@ -36,7 +28,7 @@ fargateProfiles:
     selectors:
       - namespace: codeflix
         labels:
-          role: app
+          schedule_on: fargate
 
 addons:
   - name: aws-ebs-csi-driver

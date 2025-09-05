@@ -33,4 +33,4 @@ spec:
     podTemplate:
       metadata:
         labels:
-          role: app
+          schedule_on: fargate
