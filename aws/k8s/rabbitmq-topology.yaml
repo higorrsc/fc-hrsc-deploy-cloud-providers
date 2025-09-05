@@ -1,0 +1,110 @@
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+
+metadata:
+  name: adm-videos
+  namespace: codeflix
+
+spec:
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+  importCredentialsSecret:
+    name: fc-hrsc-rabbitmq-secret
+  tags:
+    - administrator
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+
+metadata:
+  name: adm-videos-permission
+  namespace: codeflix
+
+spec:
+  vhost: "/"
+  user: adm_videos
+  permissions:
+    configure: ".*"
+    write: ".*"
+    read: ".*"
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+
+metadata:
+  name: video-created-queue
+  namespace: codeflix
+
+spec:
+  name: video.created.queue
+  vhost: "/"
+  durable: true
+  autoDelete: false
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Queue
+
+metadata:
+  name: video-encoded-queue
+  namespace: codeflix
+
+spec:
+  name: video.encoded.queue
+  vhost: "/"
+  durable: true
+  autoDelete: false
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Exchange
+
+metadata:
+  name: video-events-exchange
+  namespace: codeflix
+
+spec:
+  name: video.events
+  vhost: "/"
+  type: direct
+  durable: true
+  autoDelete: false
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+
+metadata:
+  name: video-created-binding
+  namespace: codeflix
+
+spec:
+  vhost: "/"
+  source: video.events
+  destination: video.created.queue
+  destinationType: queue
+  routingKey: video.created
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Binding
+
+metadata:
+  name: video-encoded-binding
+  namespace: codeflix
+
+spec:
+  vhost: "/"
+  source: video.events
+  destination: video.encoded.queue
+  destinationType: queue
+  routingKey: video.encoded
+  rabbitmqClusterReference:
+    name: fc-hrsc-rabbitmq

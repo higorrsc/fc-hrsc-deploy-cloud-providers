@@ -12,6 +12,7 @@
     "oidc",
     "rabbitmq",
     "storageclass",
+    "vhost",
     "xforwarded"
   ]
 }
