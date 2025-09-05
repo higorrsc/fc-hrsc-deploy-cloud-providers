@@ -9,6 +9,7 @@ terraform {
   }
 
   backend "s3" {
+    region         = "us-east-2"
     bucket         = "codeflix-terraform"
     key            = "states/terraform.cluster.tfstate"
     dynamodb_table = "tf-state-locking"
