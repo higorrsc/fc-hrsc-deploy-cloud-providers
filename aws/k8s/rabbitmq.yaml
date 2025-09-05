@@ -1,0 +1,28 @@
+apiVersion: rabbitmq.com/v1beta1
+kind: RabbitmqCluster
+
+metadata:
+  name: fc-hrsc-rabbitmq
+  namespace: codeflix
+
+spec:
+  replicas: 1
+  persistence:
+    storageClassName: fc-hrsc-storageclass
+    storage: 1Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                  - messaging

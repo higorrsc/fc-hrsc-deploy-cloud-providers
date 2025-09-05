@@ -18,6 +18,14 @@ managedNodeGroups:
     iam:
       withAddonPolicies:
         ebs: true
+  - name: fc-hrsc-mng-messaging
+    instanceType: t3.small
+    desiredCapacity: 1
+    labels:
+      role: messaging
+    iam:
+      withAddonPolicies:
+        ebs: true
 
 fargateProfiles:
   - name: fc-hrsc-fp-default

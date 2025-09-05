@@ -10,6 +10,7 @@
     "mysql",
     "nginx",
     "oidc",
+    "rabbitmq",
     "storageclass"
   ]
 }
