@@ -4,6 +4,7 @@
     "codeflix",
     "eksctl",
     "fargate",
+    "filebeat",
     "hrsc",
     "iamserviceaccount",
     "kube",

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: fc-hrsc-admin-catalog
+  namespace: codeflix
+  labels:
+    app: admin-catalog
+
+spec:
+  selector:
+    matchLabels:
+      app: admin-catalog
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: admin-catalog
+        filebeat_collector: "true"
+    spec:
+      containers:
+        - name: admin-catalog
+          image: igorgomes96/fc3-admin-catalogo-de-videos-c-sharp:latest
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ConnectionStrings__CatalogDb
+              value: Server=fc-hrsc-mysql-0.fc-hrsc-mysql-h.codeflix.svc.cluster.local;Port=3306;Database=catalog;Uid=root;Pwd=root;
+            - name: RabbitMQ__Hostname
+              value: fc-hrsc-rabbitmq.codeflix.svc.cluster.local
+            - name: Keycloak__auth-server-url
+              value: http://k8s-codeflix-ingress-e4bc264c87-677970469.us-east-2.elb.amazonaws.com
+            - name: Storage__BucketName
+              value: fc3-medias-catalog-admin
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: gcp_credentials.json
+          volumeMounts:
+            - name: fc-hrsc-gcp-credentials-volume
+              mountPath: /app/gcp_credentials.json
+              subPath: gcp_credentials.json
+      volumes:
+        - name: fc-hrsc-gcp-credentials-volume
+          secret:
+            secretName: fc-hrsc-gcp-credentials-secret

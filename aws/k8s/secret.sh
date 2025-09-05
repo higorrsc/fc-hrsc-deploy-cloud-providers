@@ -7,3 +7,7 @@ kubectl create secret generic fc-hrsc-rabbitmq-secret \
   --from-literal=username=adm_videos \
   --from-literal=password=123456 \
   -n codeflix
+
+kubectl create secret generic fc-hrsc-gcp-credentials-secret \
+  --from-file=key.json=./gcp-credentials.json \
+  -n codeflix
