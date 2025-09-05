@@ -1,11 +1,13 @@
 {
   "cSpell.words": [
+    "admincatalog",
     "autodiscover",
     "awscli",
     "codeflix",
     "eksctl",
     "fargate",
     "filebeat",
+    "healthcheck",
     "hrsc",
     "iamserviceaccount",
     "kibana",

@@ -1,5 +1,4 @@
 cluster_name=fc-hrsc-codeflix
-account=account-id-from-aws
 region=us-east-2
 vpc_id=vpc-id-from-cluster-network
 

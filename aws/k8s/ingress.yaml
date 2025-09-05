@@ -4,21 +4,41 @@ kind: Ingress
 metadata:
   name: fc-hrsc-nginx-ingress
   namespace: codeflix
-  labels:
-    app: nginx
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-path: /health
 
 spec:
   ingressClassName: alb
   rules:
     - http:
         paths:
-          - path: /
+          - path: /realms/
             pathType: Prefix
             backend:
               service:
-                name: fc-hrsc-nginx-service
+                name: fc-hrsc-keycloak
+                port:
+                  number: 8080
+          - path: /admin/
+            pathType: Prefix
+            backend:
+              service:
+                name: fc-hrsc-keycloak
+                port:
+                  number: 8080
+          - path: /resources/
+            pathType: Prefix
+            backend:
+              service:
+                name: fc-hrsc-keycloak
+                port:
+                  number: 8080
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: fc-hrsc-admincatalog
                 port:
                   number: 80

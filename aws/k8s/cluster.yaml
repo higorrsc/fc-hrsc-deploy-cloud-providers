@@ -8,27 +8,23 @@ metadata:
 
 iam:
   withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      wellKnownPolicies:
+        awsLoadBalancerController: true
 
 managedNodeGroups:
   - name: fc-hrsc-mng-app
-    instanceType: t3.small
-    desiredCapacity: 3
+    instanceType: t3.medium
+    desiredCapacity: 4
     labels:
       type: ec2
     iam:
       withAddonPolicies:
         ebs: true
-
-fargateProfiles:
-  - name: fc-hrsc-fp-default
-    selectors:
-      - namespace: default
-      - namespace: kube-system
-  - name: fc-hrsc-fp-codeflix
-    selectors:
-      - namespace: codeflix
-        labels:
-          schedule_on: fargate
+        awsLoadBalancerController: true
 
 addons:
   - name: aws-ebs-csi-driver
