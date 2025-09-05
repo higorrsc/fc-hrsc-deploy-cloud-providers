@@ -1,0 +1,36 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+
+metadata:
+  name: fc-hrsc-keycloak
+  namespace: codeflix
+
+spec:
+  instances: 1
+  db:
+    vendor: mysql
+    host: fc-hrsc-mysql-0.fc-hrsc-mysql-h.codeflix.svc.cluster.local
+    usernameSecret:
+      name: fc-hrsc-db-secret
+      key: username
+    passwordSecret:
+      name: fc-hrsc-db-secret
+      key: password
+  http:
+    httpEnabled: true
+  proxy:
+    headers: xforwarded
+  hostname:
+    strict: false
+  resources:
+    requests:
+      cpu: 800m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+  unsupported:
+    podTemplate:
+      metadata:
+        labels:
+          role: app

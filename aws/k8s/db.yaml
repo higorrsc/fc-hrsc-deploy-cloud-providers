@@ -31,7 +31,7 @@ spec:
             - containerPort: 3306
           volumeMounts:
             - mountPath: /var/lib/mysql
-              name: mysql-volume
+              name: fc-hrsc-mysql-volume
           lifecycle:
             postStart:
               exec:
@@ -47,7 +47,7 @@ spec:
                   ]
   volumeClaimTemplates:
     - metadata:
-        name: mysql-volume
+        name: fc-hrsc-mysql-volume
       spec:
         accessModes:
           - ReadWriteOnce
