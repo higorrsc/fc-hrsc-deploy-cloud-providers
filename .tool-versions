@@ -2,3 +2,4 @@ aws-iam-authenticator 0.7.5
 awscli 2.27.61
 eksctl 0.212.0
 kubectl 1.33.1
+helm 3.18.4
