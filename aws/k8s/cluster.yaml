@@ -1,0 +1,16 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: fc-hrsc-hello-cluster
+  region: us-east-2
+  version: "1.33"
+
+fargateProfiles:
+  - name: fc-hrsc-fp-default
+    selectors:
+      - namespace: default
+      - namespace: kube-system
+  - name: fc-hrsc-fp-codeflix
+    selectors:
+      - namespace: codeflix
