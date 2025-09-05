@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: fc-hrsc-front
+  namespace: codeflix
+  labels:
+    app: front
+
+spec:
+  selector:
+    matchLabels:
+      app: front
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: front
+    spec:
+      containers:
+        - name: front
+          image: igorgomes96/fc3-admin-catalogo-de-videos-react:v5
+          imagePullPolicy: Always

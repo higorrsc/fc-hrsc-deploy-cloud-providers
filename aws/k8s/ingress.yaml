@@ -42,3 +42,10 @@ spec:
                 name: fc-hrsc-admincatalog
                 port:
                   number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fc-hrsc-front-service
+                port:
+                  number: 80
