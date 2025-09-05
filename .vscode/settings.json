@@ -7,7 +7,9 @@
     "hrsc",
     "iamserviceaccount",
     "kube",
+    "mysql",
     "nginx",
-    "oidc"
+    "oidc",
+    "storageclass"
   ]
 }

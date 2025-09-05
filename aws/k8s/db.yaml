@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: fc-hrsc-mysql
+  namespace: codeflix
+
+spec:
+  replicas: 1
+  serviceName: fc-hrsc-mysql-h
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      nodeSelector:
+        role: db
+      containers:
+        - name: mysql
+          image: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-volume
+          lifecycle:
+            postStart:
+              exec:
+                command: [
+                    "/bin/sh",
+                    "-c",
+                    "
+                    until mysql -u root -p${MYSQL_ROOT_PASSWORD} -e 'SELECT 1' > /dev/null 2>&1; do
+                    echo 'Waiting for MySQL to be ready...';
+                    sleep 5;
+                    done;
+                    mysql -u root -p${MYSQL_ROOT_PASSWORD} -e 'CREATE SCHEMA IF NOT EXISTS catalog;CREATE SCHEMA IF NOT EXISTS keycloak;'",
+                  ]
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: fc-hrsc-storageclass
