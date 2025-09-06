@@ -1,0 +1,69 @@
+name: "Deploy AWS"
+
+on:
+  push:
+    branches: ["aws"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_REGION: us-east-2
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: "Terraform"
+    runs-on: ubuntu-latest
+    environment: production
+    strategy:
+      max-parallel: 1
+      matrix:
+        directory:
+          - aws/terraform/cluster
+          - aws/terraform/crds
+          - aws/terraform/manifests
+
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install AWS CLI
+        if: matrix.directory != 'aws/terraform/cluster'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+
+      - name: Update kubeconfig for EKS
+        if: matrix.directory != 'aws/terraform/cluster'
+        run: aws eks update-kubeconfig --name=fullcycle --region=${{ env.AWS_REGION }}
+
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform -chdir=${{ matrix.directory }} init
+
+      # Checks that all Terraform configuration files adhere to a canonical format
+      - name: Terraform Format
+        run: terraform -chdir=${{ matrix.directory }} fmt -check
+
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform -chdir=${{ matrix.directory }} plan -input=false
+
+        # On push to "section/3_aws_eks", build or change infrastructure according to Terraform configuration files
+        # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+      - name: Terraform Apply
+        run: terraform -chdir=${{ matrix.directory }} apply -auto-approve -input=false
